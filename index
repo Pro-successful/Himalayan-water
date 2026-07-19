@@ -6,7 +6,6 @@ HTML
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kangra Fort Map</title>
     <style>
-        /* This centers the map perfectly on your screen */
         body {
             margin: 0;
             padding: 20px;
@@ -17,14 +16,12 @@ HTML
             min-height: 100vh;
         }
 
-        /* This wrapper acts as the anchor for our interactive dots */
         .map-container {
             position: relative;
             max-width: 900px;
             width: 100%;
         }
 
-        /* This ensures the image scales beautifully on phones and desktops */
         .map-image {
             width: 100%;
             height: auto;
@@ -32,13 +29,48 @@ HTML
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
+
+        /* NEW STYLES FOR STEP 2: The Interactive Hotspots */
+        .hotspot {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 188, 212, 0.7); /* Cyan color matching your image */
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%); /* Centers the dot exactly on its coordinates */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+
+        /* Make the marker pop slightly when you hover over it */
+        .hotspot:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+            background-color: rgba(0, 188, 212, 1);
+        }
+
+        /* Position Marker 1: Near the Ticket Counter area */
+        .marker-ticket {
+            top: 53%;
+            left: 75%;
+        }
+
+        /* Position Marker 2: Near the Inner Courtyard area */
+        .marker-courtyard {
+            top: 24%;
+            left: 76%;
+        }
     </style>
 </head>
 <body>
 
     <div class="map-container">
-        <!-- Replace 'kangra-fort.jpg' with your actual image filename later -->
         <img src="kangra-fort.jpg" alt="Kangra Fort Model" class="map-image">
+        
+        <!-- NEW CODE: Adding our two interactive hotspot buttons -->
+        <div class="hotspot marker-ticket"></div>
+        <div class="hotspot marker-courtyard"></div>
     </div>
 
 </body>
