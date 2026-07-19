@@ -11,9 +11,11 @@ HTML
             padding: 20px;
             background-color: #f0f2f5;
             display: flex;
+            flex-direction: column; /* Stacks the map and the text box vertically */
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            font-family: sans-serif;
         }
 
         .map-container {
@@ -30,36 +32,49 @@ HTML
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
 
-        /* NEW STYLES FOR STEP 2: The Interactive Hotspots */
         .hotspot {
             position: absolute;
             width: 40px;
             height: 40px;
-            background-color: rgba(0, 188, 212, 0.7); /* Cyan color matching your image */
+            background-color: rgba(0, 188, 212, 0.7);
             border: 3px solid #ffffff;
             border-radius: 50%;
             cursor: pointer;
-            transform: translate(-50%, -50%); /* Centers the dot exactly on its coordinates */
+            transform: translate(-50%, -50%);
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: transform 0.2s ease;
         }
 
-        /* Make the marker pop slightly when you hover over it */
         .hotspot:hover {
             transform: translate(-50%, -50%) scale(1.2);
             background-color: rgba(0, 188, 212, 1);
         }
 
-        /* Position Marker 1: Near the Ticket Counter area */
-        .marker-ticket {
-            top: 53%;
-            left: 75%;
+        .marker-ticket { top: 53%; left: 75%; }
+        .marker-courtyard { top: 24%; left: 76%; }
+
+        /* NEW STYLES FOR STEP 3: The Information Panel */
+        .info-panel {
+            margin-top: 20px;
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            box-sizing: border-box;
         }
 
-        /* Position Marker 2: Near the Inner Courtyard area */
-        .marker-courtyard {
-            top: 24%;
-            left: 76%;
+        .info-panel h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .info-panel p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -68,14 +83,24 @@ HTML
     <div class="map-container">
         <img src="kangra-fort.jpg" alt="Kangra Fort Model" class="map-image">
         
-        <!-- NEW CODE: Adding our two interactive hotspot buttons -->
-        <div class="hotspot marker-ticket"></div>
-        <div class="hotspot marker-courtyard"></div>
+        <!-- NEW CODE: Adding 'onclick' triggers to the hotspots -->
+        <div class="hotspot marker-ticket" onclick="updateInfo('Ticket Counter', 'This is the main entry point where visitors register and gather audio guide equipment.')"></div>
+        <div class="hotspot marker-courtyard" onclick="updateInfo('Inner Courtyard', 'The historical upper courtyard where assembly took place, leading up to the main palace terraces.')"></div>
     </div>
+
+    <!-- NEW CODE: The display panel that changes text dynamically -->
+    <div class="info-panel">
+        <h2 id="info-title">Interactive Map</h2>
+        <p id="info-text">Click on any of the cyan glowing dots on the fort model to learn more about the structure!</p>
+    </div>
+
+    <!-- NEW CODE: JavaScript to handle the click actions -->
+    <script>
+        function updateInfo(title, description) {
+            document.getElementById('info-title').innerText = title;
+            document.getElementById('info-text').innerText = description;
+        }
+    </script>
 
 </body>
 </html>
-What to do now:
-Replace your code in GitHub with this code and hit Commit changes.
-
-Reply with "Done" when you've saved it, and we will finish up with Step 3: Making the description boxes pop up when clicked!
