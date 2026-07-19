@@ -4,277 +4,42 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Kangra Fort Guide</title>
+    <title>Kangra Fort Map</title>
     <style>
-        :root {
-            --bg-color: #f7f9fa;
-            --primary-accent: #00bcd4;
-            --secondary-accent: #ff5722;
-            --text-dark: #333;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        /* This centers the map perfectly on your screen */
         body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
+            margin: 0;
             padding: 20px;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #2c3e50;
-        }
-
-        header p {
-            color: #7f8c8d;
-            margin-top: 5px;
-        }
-
-        /* Map Container */
-        .map-wrapper {
+        /* This wrapper acts as the anchor for our interactive dots */
+        .map-container {
             position: relative;
-            max-width: 1000px;
+            max-width: 900px;
             width: 100%;
-            border-radius: 16px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.1);
-            overflow: hidden;
-            background: #fff;
         }
 
+        /* This ensures the image scales beautifully on phones and desktops */
         .map-image {
             width: 100%;
-            display: block;
             height: auto;
-        }
-
-        /* Interactive Hotspots */
-        .hotspot {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        /* Pulse Ring Effect */
-        .hotspot::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-            opacity: 0;
-            z-index: -1;
-        }
-
-        /* Target Styles based on UI */
-        .hotspot-cyan .icon-circle {
-            background: rgba(0, 188, 212, 0.2);
-            border: 3px solid var(--primary-accent);
-            color: var(--primary-accent);
-        }
-        .hotspot-cyan::before { border: 2px solid var(--primary-accent); }
-
-        .hotspot-orange .icon-circle {
-            background: rgba(255, 87, 34, 0.2);
-            border: 3px solid var(--secondary-accent);
-            color: var(--secondary-accent);
-        }
-        .hotspot-orange::before { border: 2px solid var(--secondary-accent); }
-
-        .icon-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.8rem;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease, background 0.3s ease;
-            background: white;
-        }
-
-        .hotspot:hover .icon-circle {
-            transform: scale(1.15);
-            background: white;
-        }
-
-        /* Dynamic Tooltips/Labels matching the picture style */
-        .info-label {
-            position: absolute;
-            background: var(--glass-bg);
-            border-left: 4px solid var(--primary-accent);
-            padding: 10px 14px;
-            border-radius: 4px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            width: 220px;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            z-index: 20;
-        }
-
-        .hotspot:hover .info-label {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Specific positions for labels to not overlap poorly */
-        .label-top { bottom: 60px; left: 50%; transform: translateX(-50%) translateY(10px); }
-        .hotspot:hover .label-top { transform: translateX(-50%) translateY(0); }
-
-        .label-right { left: 60px; top: 50%; transform: translateY(-50%) translateX(10px); }
-        .hotspot:hover .label-right { transform: translateY(-50%) translateX(0); }
-
-        .info-label h4 {
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-            color: #2c3e50;
-        }
-
-        .info-label p {
-            font-size: 0.75rem;
-            color: #666;
-            line-height: 1.3;
-        }
-
-        /* Info Sidebar Panel */
-        .info-panel {
-            margin-top: 25px;
-            max-width: 1000px;
-            width: 100%;
-            background: white;
-            padding: 20px;
+            display: block;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-
-        .info-panel h3 {
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-
-        .info-panel p {
-            color: #555;
-            font-size: 0.95rem;
-        }
-
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
-        }
-
-        /* Responsive scaling */
-        @media (max-width: 768px) {
-            .icon-circle { width: 38px; height: 38px; font-size: 0.6rem; }
-            .info-label { width: 160px; padding: 6px 10px; }
-            .info-label h4 { font-size: 0.8rem; }
-            .info-label p { font-size: 0.65rem; }
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Kangra Fort</h1>
-        <p>Interactive Architectural & Visitor Map Explore Guide</p>
-    </header>
-
-    <div class="map-wrapper">
-        <!-- REPLACE 'kangra-fort-model.jpg' WITH YOUR ACTUAL IMAGE PATH -->
-        <img src="kangra-fort-model.jpg" alt="Kangra Fort 3D Model" class="map-image">
-
-        <!-- Hotspot: Ticket Counter -->
-        <div class="hotspot hotspot-cyan" style="top: 53%; left: 75.5%;" onclick="showDetails('Ticket Counter', 'Purchase your entry tickets and collect audio guide devices here before entering the main fortification walls.')">
-            <div class="icon-circle">TICKET</div>
-            <div class="info-label label-top">
-                <h4>Ticket Counter</h4>
-                <p>Entry registration and audio guides collection center.</p>
-            </div>
-        </div>
-
-        <!-- Hotspot: You Are Here / Entrance Path -->
-        <div class="hotspot hotspot-orange" style="top: 61%; left: 60.5%;" onclick="showDetails('Main Entrance Path', 'You are currently here, heading along the lower courtyard pathway leading up to the historic ramparts.')">
-            <div class="icon-circle" style="font-size: 0.65rem; line-height: 1.1;">YOU ARE HERE</div>
-            <div class="info-label label-top">
-                <h4>Current Location</h4>
-                <p>Lower gate entrance walkway pathway.</p>
-            </div>
-        </div>
-
-        <!-- Hotspot: Audio Guide Zone -->
-        <div class="hotspot hotspot-cyan" style="top: 49%; left: 67%;" onclick="showDetails('Audio Guide Hotspot', 'Put on your headphones. This location marks the first major audio story trigger describing the outer defense architectures.')">
-            <div class="icon-circle">🎧</div>
-            <div class="info-label label-right">
-                <h4>Audio Tour #1</h4>
-                <p>Listen to the history of the defensive gates.</p>
-            </div>
-        </div>
-
-        <!-- Hotspot: Inner Courtyard -->
-        <div class="hotspot hotspot-cyan" style="top: 24%; left: 76%;" onclick="showDetails('Inner Courtyard', 'The upper inner courtyard surrounded by structures that housed the royal guards and served as central assembly areas.')">
-            <div class="icon-circle">✦</div>
-            <div class="info-label label-top">
-                <h4>Inner Courtyard</h4>
-                <p>Royal assembly grounds and upper terrace structures.</p>
-            </div>
-        </div>
-
-        <!-- Hotspot: Chief Palace Complex -->
-        <div class="hotspot hotspot-cyan" style="top: 19%; left: 45%;" onclick="showDetails('Other Palace Complex', 'The highest section of the fort containing ruins of the structural palaces offering expansive views of the valley.')">
-            <div class="icon-circle">🏛️</div>
-            <div class="info-label label-top">
-                <h4>Palace Complex</h4>
-                <p>Royal residential quarters at the highest citadel peak.</p>
-            </div>
-        </div>
+    <div class="map-container">
+        <!-- Replace 'kangra-fort.jpg' with your actual image filename later -->
+        <img src="kangra-fort.jpg" alt="Kangra Fort Model" class="map-image">
     </div>
 
-    <!-- Dynamic info container display on click -->
-    <div class="info-panel" id="detail-panel">
-        <h3>Interactive Map Navigation</h3>
-        <p>Hover over the glowing markers on the 3D model to glimpse locations, or click them to reveal extensive structural field info details here.</p>
-    </div>
-
-    <script>
-        function showDetails(title, description) {
-            const panel = document.getElementById('detail-panel');
-            panel.innerHTML = `
-                <h3 style="color: var(--secondary-accent);">${title}</h3>
-                <p style="margin-top: 5px; font-size: 1.05rem;">${description}</p>
-            `;
-            // Quick visual bounce response feedback
-            panel.style.transform = 'scale(1.02)';
-            setTimeout(() => { panel.style.transform = 'scale(1)'; }, 150);
-        }
-    </script>
 </body>
 </html>
