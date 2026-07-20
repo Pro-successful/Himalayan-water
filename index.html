@@ -4,97 +4,139 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kangra Fort Map</title>
+    <title>Vedica Spring - Interactive Heritage Map</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500&display=swap');
+
         body {
             margin: 0;
-            padding: 20px;
-            background-color: #f0f2f5;
+            padding: 40px 20px;
+            background-color: #0d0f12; /* Premium dark slate background */
+            color: #ffffff;
             display: flex;
-            flex-direction: column; /* Stacks the map and the text box vertically */
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: sans-serif;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+            letter-spacing: 0.5px;
         }
 
         .map-container {
             position: relative;
             max-width: 900px;
             width: 100%;
+            border: 1px solid rgba(212, 175, 55, 0.2); /* Soft luxury gold border */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
         }
 
         .map-image {
             width: 100%;
             height: auto;
             display: block;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            filter: brightness(0.9) contrast(1.05); /* Subtle cinematic tint */
         }
 
+        /* Vedica Luxury Hotspot Styles */
         .hotspot {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0, 188, 212, 0.7);
-            border: 3px solid #ffffff;
+            width: 3.5%; 
+            aspect-ratio: 1 / 1;
+            min-width: 22px;
+            min-height: 22px;
+            background-color: rgba(212, 175, 55, 0.85); /* Rich Vedica Gold */
+            border: 1px solid #ffffff;
             border-radius: 50%;
             cursor: pointer;
             transform: translate(-50%, -50%);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease;
+            padding: 0;
+            outline: none;
         }
 
-        .hotspot:hover {
-            transform: translate(-50%, -50%) scale(1.2);
-            background-color: rgba(0, 188, 212, 1);
+        /* Golden atmospheric ripple effect */
+        .hotspot::after {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            border-radius: 50%;
+            animation: vedicaPulse 2.5s infinite ease-out;
+        }
+
+        .hotspot:hover, .hotspot:focus {
+            transform: translate(-50%, -50%) scale(1.3);
+            background-color: #ffffff;
+            border-color: #d4af37;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes vedicaPulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.8); opacity: 0; }
         }
 
         .marker-ticket { top: 53%; left: 75%; }
         .marker-courtyard { top: 24%; left: 76%; }
 
-        /* NEW STYLES FOR STEP 3: The Information Panel */
+        /* Elegant Luxury Information Panel */
         .info-panel {
-            margin-top: 20px;
+            margin-top: 30px;
             max-width: 900px;
             width: 100%;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: linear-gradient(145deg, #14171c, #1a1e24);
+            padding: 35px 25px;
+            border-radius: 8px;
+            border-top: 2px solid #d4af37; /* Gold accent line signature */
             text-align: center;
             box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
         .info-panel h2 {
             margin-top: 0;
-            color: #2c3e50;
+            margin-bottom: 15px;
+            font-family: 'Cinzel', serif; /* Premium luxury serif header */
+            color: #d4af37;
+            font-weight: 400;
+            letter-spacing: 2px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
         }
 
         .info-panel p {
-            color: #555;
-            font-size: 1.1rem;
-            line-height: 1.5;
+            color: #b0b5c0;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
 
     <div class="map-container">
-        <img src="kangra-fort.jpg" alt="Kangra Fort Model" class="map-image">
+        <img src="kangra-fort.jpg" alt="Interactive Heritage Map View" class="map-image">
         
-        <!-- NEW CODE: Adding 'onclick' triggers to the hotspots -->
-        <div class="hotspot marker-ticket" onclick="updateInfo('Ticket Counter', 'This is the main entry point where visitors register and gather audio guide equipment.')"></div>
-        <div class="hotspot marker-courtyard" onclick="updateInfo('Inner Courtyard', 'The historical upper courtyard where assembly took place, leading up to the main palace terraces.')"></div>
+        <button class="hotspot marker-ticket" 
+                title="Ticket Counter"
+                onclick="updateInfo('Ticket Counter', 'This is the main entry point where visitors register and gather audio guide equipment to begin their high-altitude heritage journey.')"></button>
+        
+        <button class="hotspot marker-courtyard" 
+                title="Inner Courtyard"
+                onclick="updateInfo('Inner Courtyard', 'The historical upper courtyard where structural assembly took place, leading seamlessly up to the grand palace terraces.')"></button>
     </div>
 
-    <!-- NEW CODE: The display panel that changes text dynamically -->
     <div class="info-panel">
-        <h2 id="info-title">Interactive Map</h2>
-        <p id="info-text">Click on any of the cyan glowing dots on the fort model to learn more about the structure!</p>
+        <h2 id="info-title">A Journey of Provenance</h2>
+        <p id="info-text">Interact with the golden markers resting on the historic model to explore the serene landmarks of this ancient structure.</p>
     </div>
 
-    <!-- NEW CODE: JavaScript to handle the click actions -->
     <script>
         function updateInfo(title, description) {
             document.getElementById('info-title').innerText = title;
